@@ -1,0 +1,14 @@
+---
+- name: create a user
+  hosts: all
+  gather_facts: false
+  vars_files:
+    - vars/users
+  tasks:
+    - name: creating user
+      user:
+        name: "{{ item.value.username }}"
+        home: "{{ item.value.homedir}}"
+        comment: "{{ item.value.comment }}"
+        password: "{{ item.value.userpass | password_hash('sha512', 'A512') }}"
+      with_dict: "{{ users }}"
